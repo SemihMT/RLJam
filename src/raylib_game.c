@@ -72,7 +72,7 @@ int main(void)
 
     // Initialization
     //--------------------------------------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib gamejam template");
+    InitWindow(screenWidth, screenHeight, "Testing the raylib gamejam template");
     
     // TODO: Load resources / Initialize variables at this point
     
