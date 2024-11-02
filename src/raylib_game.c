@@ -14,8 +14,8 @@
 #include "raylib.h"
 
 #if defined(PLATFORM_WEB)
-    #define CUSTOM_MODAL_DIALOGS            // Force custom modal dialogs usage
-    #include <emscripten/emscripten.h>      // Emscripten library - LLVM to JavaScript compiler
+#define CUSTOM_MODAL_DIALOGS            // Force custom modal dialogs usage
+#include <emscripten/emscripten.h>      // Emscripten library - LLVM to JavaScript compiler
 #endif
 
 #include <stdio.h>                          // Required for: printf()
@@ -29,19 +29,20 @@
 // NOTE: Avoiding those calls, also avoids const strings memory usage
 #define SUPPORT_LOG_INFO
 #if defined(SUPPORT_LOG_INFO)
-    #define LOG(...) printf(__VA_ARGS__)
+#define LOG(...) printf(__VA_ARGS__)
 #else
-    #define LOG(...)
+#define LOG(...)
 #endif
 
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum { 
-    SCREEN_LOGO = 0, 
-    SCREEN_TITLE, 
-    SCREEN_GAMEPLAY, 
-    SCREEN_ENDING
+typedef enum
+{
+	SCREEN_LOGO = 0,
+	SCREEN_TITLE,
+	SCREEN_GAMEPLAY,
+	SCREEN_ENDING
 } GameScreen;
 
 // TODO: Define your custom data types here
@@ -67,43 +68,43 @@ static void UpdateDrawFrame(void);      // Update and Draw one frame
 int main(void)
 {
 #if !defined(_DEBUG)
-    SetTraceLogLevel(LOG_NONE);         // Disable raylib trace log messages
+	SetTraceLogLevel(LOG_NONE);         // Disable raylib trace log messages
 #endif
 
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "Testing the raylib gamejam template");
-    
-    // TODO: Load resources / Initialize variables at this point
-    
-    // Render texture to draw full screen, enables screen scaling
-    // NOTE: If screen is scaled, mouse input should be scaled proportionally
-    target = LoadRenderTexture(screenWidth, screenHeight);
-    SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
+	// Initialization
+	//--------------------------------------------------------------------------------------
+	InitWindow(screenWidth, screenHeight, "Testing the raylib gamejam template");
+
+	// TODO: Load resources / Initialize variables at this point
+
+	// Render texture to draw full screen, enables screen scaling
+	// NOTE: If screen is scaled, mouse input should be scaled proportionally
+	target = LoadRenderTexture(screenWidth, screenHeight);
+	SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
 #if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
+	emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
-    SetTargetFPS(60);     // Set our game frames-per-second
-    //--------------------------------------------------------------------------------------
+	SetTargetFPS(60);     // Set our game frames-per-second
+	//--------------------------------------------------------------------------------------
 
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button
-    {
-        UpdateDrawFrame();
-    }
+	// Main game loop
+	while (!WindowShouldClose())    // Detect window close button
+	{
+		UpdateDrawFrame();
+	}
 #endif
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    UnloadRenderTexture(target);
-    
-    // TODO: Unload all loaded resources at this point
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	UnloadRenderTexture(target);
 
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+	// TODO: Unload all loaded resources at this point
 
-    return 0;
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
+
+	return 0;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -112,33 +113,38 @@ int main(void)
 // Update and draw frame
 void UpdateDrawFrame(void)
 {
-    // Update
-    //----------------------------------------------------------------------------------
-    // TODO: Update variables / Implement example logic at this point
-    //----------------------------------------------------------------------------------
+	// Update
+	//----------------------------------------------------------------------------------
+	// TODO: Update variables / Implement example logic at this point
+	//----------------------------------------------------------------------------------
+	if (GetKeyPressed(KEY_ENTER))
+	{
+		TraceLog(LOG_INFO, "Enter Key Pressed");
+	}
 
-    // Draw
-    //----------------------------------------------------------------------------------
-    // Render game screen to a texture, 
-    // it could be useful for scaling or further shader postprocessing
-    BeginTextureMode(target);
-        ClearBackground(RAYWHITE);
-        
-        // TODO: Draw your game screen here
-        DrawText("Welcome to raylib NEXT gamejam!", 150, 140, 30, BLACK);
-        DrawRectangleLinesEx((Rectangle){ 0, 0, screenWidth, screenHeight }, 16, BLACK);
-        
-    EndTextureMode();
-    
-    // Render to screen (main framebuffer)
-    BeginDrawing();
-        ClearBackground(RAYWHITE);
-        
-        // Draw render texture to screen, scaled if required
-        DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, -(float)target.texture.height }, (Rectangle){ 0, 0, (float)target.texture.width, (float)target.texture.height }, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
-        // TODO: Draw everything that requires to be drawn at this point, maybe UI?
+	// Draw
+	//----------------------------------------------------------------------------------
+	// Render game screen to a texture, 
+	// it could be useful for scaling or further shader postprocessing
+	BeginTextureMode(target);
+	ClearBackground(RAYWHITE);
 
-    EndDrawing();
-    //----------------------------------------------------------------------------------  
+	// TODO: Draw your game screen here
+	DrawText("Welcome to raylib NEXT gamejam!", 150, 140, 30, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+
+	EndTextureMode();
+
+	// Render to screen (main framebuffer)
+	BeginDrawing();
+	ClearBackground(RAYWHITE);
+
+	// Draw render texture to screen, scaled if required
+	DrawTexturePro(target.texture, (Rectangle) { 0, 0, (float)target.texture.width, -(float)target.texture.height }, (Rectangle) { 0, 0, (float)target.texture.width, (float)target.texture.height }, (Vector2) { 0, 0 }, 0.0f, WHITE);
+
+	// TODO: Draw everything that requires to be drawn at this point, maybe UI?
+
+	EndDrawing();
+	//----------------------------------------------------------------------------------  
 }
