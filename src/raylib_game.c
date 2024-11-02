@@ -117,7 +117,7 @@ void UpdateDrawFrame(void)
 	//----------------------------------------------------------------------------------
 	// TODO: Update variables / Implement example logic at this point
 	//----------------------------------------------------------------------------------
-	if (GetKeyPressed(KEY_ENTER))
+	if (IsKeyPressed(KEY_ENTER))
 	{
 		TraceLog(LOG_INFO, "Enter Key Pressed");
 	}
