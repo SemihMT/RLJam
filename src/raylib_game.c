@@ -50,8 +50,8 @@ typedef enum
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 
@@ -61,7 +61,16 @@ static RenderTexture2D target = { 0 };  // Render texture to render our game
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
 static void UpdateDrawFrame(void);      // Update and Draw one frame
+GameScreen currentScreen = SCREEN_LOGO;
 
+// Function prototypes for screen updates
+void UpdateDrawLogoScreen(void);
+void UpdateDrawTitleScreen(void);
+void UpdateDrawGameplayScreen(void);
+void UpdateDrawEndingScreen(void);
+
+// Function prototype for switching screen
+void SwitchScreen(GameScreen screen);
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -73,7 +82,7 @@ int main(void)
 
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	InitWindow(screenWidth, screenHeight, "Testing the raylib gamejam template");
+	InitWindow(screenWidth, screenHeight, "PROTO-CALL");
 
 	// TODO: Load resources / Initialize variables at this point
 
@@ -114,27 +123,15 @@ int main(void)
 void UpdateDrawFrame(void)
 {
 	// Update
-	//----------------------------------------------------------------------------------
-	// TODO: Update variables / Implement example logic at this point
-	//----------------------------------------------------------------------------------
-	if (IsKeyPressed(KEY_ENTER))
+	// Update the current screen
+	switch (currentScreen)
 	{
-		TraceLog(LOG_INFO, "Enter Key Pressed");
+	case SCREEN_LOGO: UpdateDrawLogoScreen(); break;
+	case SCREEN_TITLE: UpdateDrawTitleScreen(); break;
+	case SCREEN_GAMEPLAY: UpdateDrawGameplayScreen(); break;
+	case SCREEN_ENDING: UpdateDrawEndingScreen(); break;
+	default: break;
 	}
-
-
-	// Draw
-	//----------------------------------------------------------------------------------
-	// Render game screen to a texture, 
-	// it could be useful for scaling or further shader postprocessing
-	BeginTextureMode(target);
-	ClearBackground(RAYWHITE);
-
-	// TODO: Draw your game screen here
-	DrawText("Welcome to raylib NEXT gamejam!", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
-
-	EndTextureMode();
 
 	// Render to screen (main framebuffer)
 	BeginDrawing();
@@ -147,4 +144,73 @@ void UpdateDrawFrame(void)
 
 	EndDrawing();
 	//----------------------------------------------------------------------------------  
+}
+
+void UpdateDrawLogoScreen(void)
+{
+	//Update
+	if (IsKeyPressed(KEY_ENTER))
+	{
+		SwitchScreen(SCREEN_TITLE);  // Switch to Title screen
+	}
+	//Draw to texture
+	BeginTextureMode(target);
+	ClearBackground(RAYWHITE);
+
+	DrawText("Logo Screen", 150, 140, 30, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+
+	EndTextureMode();
+}
+
+void UpdateDrawTitleScreen(void)
+{
+	if (IsKeyPressed(KEY_ENTER))
+	{
+		SwitchScreen(SCREEN_GAMEPLAY);  // Switch to Gameplay screen
+	}
+	//Draw to texture
+	BeginTextureMode(target);
+	ClearBackground(RAYWHITE);
+
+	DrawText("Title Screen", 150, 140, 30, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+
+	EndTextureMode();
+}
+
+void UpdateDrawGameplayScreen(void)
+{
+	 if (IsKeyPressed(KEY_ENTER)) {
+        SwitchScreen(SCREEN_ENDING);  // Switch to Ending screen
+    }
+
+	//Draw to texture
+	BeginTextureMode(target);
+	ClearBackground(RAYWHITE);
+
+	DrawText("Gameplay Screen", 150, 140, 30, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+
+	EndTextureMode();
+}
+
+void UpdateDrawEndingScreen(void)
+{
+	 if (IsKeyPressed(KEY_ENTER)) {
+        SwitchScreen(SCREEN_LOGO);  // Loop back to Logo screen
+    }
+	//Draw to texture
+	BeginTextureMode(target);
+	ClearBackground(RAYWHITE);
+
+	DrawText("Ending Screen", 150, 140, 30, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+
+	EndTextureMode();
+}
+
+void SwitchScreen(GameScreen screen)
+{
+	currentScreen = screen;
 }
