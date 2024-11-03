@@ -360,9 +360,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\raylib_game.c" />
+    <ClCompile Include="..\..\..\src\texture_manager.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\src\raylib_game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\texture_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

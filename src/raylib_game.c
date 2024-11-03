@@ -22,6 +22,7 @@
 #include <stdlib.h>                         // Required for: 
 #include <string.h>                         // Required for: 
 
+#include "texture_manager.h"
 //----------------------------------------------------------------------------------
 // Defines and Macros
 //----------------------------------------------------------------------------------
@@ -56,7 +57,7 @@ static const int screenHeight = 720;
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 
 // TODO: Define global variables here, recommended to make them static
-
+TextureManager* textureManager;
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
@@ -84,6 +85,13 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	InitWindow(screenWidth, screenHeight, "PROTO-CALL");
 
+	TraceLog(LOG_INFO,GetWorkingDirectory());
+	// Create the texture manager
+	textureManager = CreateTextureManager();
+
+	// Load textures
+	Manager_LoadTexture(textureManager, "logo", "resources/logo.png");
+
 	// TODO: Load resources / Initialize variables at this point
 
 	// Render texture to draw full screen, enables screen scaling
@@ -108,7 +116,8 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	UnloadRenderTexture(target);
 
-	// TODO: Unload all loaded resources at this point
+	// Unload textures and clean up
+	Manager_UnloadTextures(textureManager);
 
 	CloseWindow();        // Close window and OpenGL context
 	//--------------------------------------------------------------------------------------
@@ -122,7 +131,6 @@ int main(void)
 // Update and draw frame
 void UpdateDrawFrame(void)
 {
-	// Update
 	// Update the current screen
 	switch (currentScreen)
 	{
@@ -146,20 +154,47 @@ void UpdateDrawFrame(void)
 	//----------------------------------------------------------------------------------  
 }
 
+float LogoScreenTimer = 0.0f;
+float LogoScreenDuration = 5.0f;
 void UpdateDrawLogoScreen(void)
 {
+	LogoScreenTimer += GetFrameTime();
 	//Update
-	if (IsKeyPressed(KEY_ENTER))
+	if (LogoScreenTimer >= LogoScreenDuration)
 	{
+		LogoScreenTimer = 0.0f;
 		SwitchScreen(SCREEN_TITLE);  // Switch to Title screen
 	}
 	//Draw to texture
 	BeginTextureMode(target);
 	ClearBackground(RAYWHITE);
+	
+	
+	Texture2D logo = Manager_GetTexture(textureManager, "logo");
+	Vector2 pos;
+	pos.x = GetScreenWidth() / 2.0f - (logo.width / 4.0f);
+	pos.y = GetScreenHeight() / 2.0f - (logo.height / 4.0f);
 
-	DrawText("Logo Screen", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
+	DrawRectangle(0,0,GetScreenWidth(), 440,cornFlowerBlue);
 
+	Color green = {.r=106,.g=190, .b = 48,.a = 255};
+	DrawRectangle(0,440,GetScreenWidth(), 16,green);
+
+	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
+	DrawRectangle(0,456,GetScreenWidth(), 500,brown);
+
+	DrawTextureEx(logo,pos,0.0f,0.5f, WHITE);
+
+	DrawRectangleLinesEx( 
+		(Rectangle){GetScreenWidth() / 2.0f - (logo.width / 2.0f),
+		GetScreenHeight() / 2.0f - (logo.height / 2.0f),
+		logo.width,
+		logo.height},
+		15.0f,
+		BLACK);
+
+	DrawText("Made By Rhetorical", 495, 540, 30, BLACK);
 	EndTextureMode();
 }
 
@@ -181,9 +216,10 @@ void UpdateDrawTitleScreen(void)
 
 void UpdateDrawGameplayScreen(void)
 {
-	 if (IsKeyPressed(KEY_ENTER)) {
-        SwitchScreen(SCREEN_ENDING);  // Switch to Ending screen
-    }
+	if (IsKeyPressed(KEY_ENTER))
+	{
+		SwitchScreen(SCREEN_ENDING);  // Switch to Ending screen
+	}
 
 	//Draw to texture
 	BeginTextureMode(target);
@@ -197,9 +233,10 @@ void UpdateDrawGameplayScreen(void)
 
 void UpdateDrawEndingScreen(void)
 {
-	 if (IsKeyPressed(KEY_ENTER)) {
-        SwitchScreen(SCREEN_LOGO);  // Loop back to Logo screen
-    }
+	if (IsKeyPressed(KEY_ENTER))
+	{
+		SwitchScreen(SCREEN_LOGO);  // Loop back to Logo screen
+	}
 	//Draw to texture
 	BeginTextureMode(target);
 	ClearBackground(RAYWHITE);
@@ -213,4 +250,24 @@ void UpdateDrawEndingScreen(void)
 void SwitchScreen(GameScreen screen)
 {
 	currentScreen = screen;
+	switch (currentScreen)
+	{
+	case SCREEN_LOGO: 
+	{
+	}
+	break;
+	case SCREEN_TITLE:
+	{
+	}
+	break;
+	case SCREEN_GAMEPLAY: 
+	{
+	}
+	break;
+	case SCREEN_ENDING:
+	{
+	}
+	break;
+	default: break;
+	}
 }
