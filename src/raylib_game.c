@@ -51,8 +51,8 @@ typedef enum
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-static const int screenWidth = 1280;
-static const int screenHeight = 720;
+static const int screenWidth = 1920;
+static const int screenHeight = 1080;
 
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 
@@ -172,29 +172,29 @@ void UpdateDrawLogoScreen(void)
 	
 	Texture2D logo = Manager_GetTexture(textureManager, "logo");
 	Vector2 pos;
-	pos.x = GetScreenWidth() / 2.0f - (logo.width / 4.0f);
-	pos.y = GetScreenHeight() / 2.0f - (logo.height / 4.0f);
+	pos.x = GetScreenWidth() / 2.0f - (logo.width / 2.0f);
+	pos.y = GetScreenHeight() / 2.0f - (logo.height / 2.0f);
 
 	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
-	DrawRectangle(0,0,GetScreenWidth(), 440,cornFlowerBlue);
+	DrawRectangle(0,0,GetScreenWidth(), 700,cornFlowerBlue);
 
 	Color green = {.r=106,.g=190, .b = 48,.a = 255};
-	DrawRectangle(0,440,GetScreenWidth(), 16,green);
+	DrawRectangle(0,700,GetScreenWidth(), 32,green);
 
 	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
-	DrawRectangle(0,456,GetScreenWidth(), 500,brown);
+	DrawRectangle(0,732,GetScreenWidth(), 1000,brown);
 
-	DrawTextureEx(logo,pos,0.0f,0.5f, WHITE);
+	DrawTextureEx(logo,pos,0.0f,1, WHITE);
 
 	DrawRectangleLinesEx( 
-		(Rectangle){GetScreenWidth() / 2.0f - (logo.width / 2.0f),
-		GetScreenHeight() / 2.0f - (logo.height / 2.0f),
+		(Rectangle){GetScreenWidth() / 2.0f - (logo.width / 2.0),
+		GetScreenHeight() / 2.0f - (logo.height / 2.0),
 		logo.width,
 		logo.height},
 		15.0f,
 		BLACK);
 
-	DrawText("Made By Rhetorical", 495, 540, 30, BLACK);
+	DrawText("Made By Rhetorical", 815, 800, 30, BLACK);
 	EndTextureMode();
 }
 
