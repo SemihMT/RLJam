@@ -20,9 +20,12 @@
 
 #include <stdio.h>                          // Required for: printf()
 #include <stdlib.h>                         // Required for: 
+#include <time.h>
 #include <string.h>                         // Required for: 
 
 #include "texture_manager.h"
+#include "button.h"
+#include "Palette.h"
 //----------------------------------------------------------------------------------
 // Defines and Macros
 //----------------------------------------------------------------------------------
@@ -46,6 +49,8 @@ typedef enum
 	SCREEN_ENDING
 } GameScreen;
 
+
+
 // TODO: Define your custom data types here
 
 //----------------------------------------------------------------------------------
@@ -57,7 +62,10 @@ static const int screenHeight = 1080;
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 
 // TODO: Define global variables here, recommended to make them static
+static bool ShouldClose = false;
 TextureManager* textureManager;
+Button StartButton;
+Button QuitButton;
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
@@ -89,6 +97,9 @@ int main(void)
 	// Create the texture manager
 	textureManager = CreateTextureManager();
 
+	StartButton = CreateButton(screenWidth / 2.0f - 100, screenHeight / 2.0f + 350 - 100, 200, 50, GRAY, LIGHTGRAY, DARKGRAY);
+	QuitButton = CreateButton(screenWidth / 2.0f - 100, screenHeight / 2.0f + 350 - 25, 200, 50, GRAY, LIGHTGRAY, DARKGRAY);
+
 	// Load textures
 	Manager_LoadTexture(textureManager, "logo", "resources/logo.png");
 
@@ -104,9 +115,8 @@ int main(void)
 #else
 	SetTargetFPS(60);     // Set our game frames-per-second
 	//--------------------------------------------------------------------------------------
-
 	// Main game loop
-	while (!WindowShouldClose())    // Detect window close button
+	while (!WindowShouldClose() && !ShouldClose)    // Detect window close button
 	{
 		UpdateDrawFrame();
 	}
@@ -155,7 +165,7 @@ void UpdateDrawFrame(void)
 }
 
 float LogoScreenTimer = 0.0f;
-float LogoScreenDuration = 5.0f;
+float LogoScreenDuration = 2.0f;
 void UpdateDrawLogoScreen(void)
 {
 	LogoScreenTimer += GetFrameTime();
@@ -199,35 +209,43 @@ void UpdateDrawLogoScreen(void)
 	EndTextureMode();
 }
 
+
 void UpdateDrawTitleScreen(void)
 {
-	if (IsKeyPressed(KEY_ENTER))
+	UpdateButton(&StartButton);
+	UpdateButton(&QuitButton);
+	
+	if(StartButton.isPressed)
 	{
-		SwitchScreen(SCREEN_GAMEPLAY);  // Switch to Gameplay screen
+		SwitchScreen(SCREEN_GAMEPLAY);
 	}
+	if(QuitButton.isPressed)
+	{
+		ShouldClose = true;
+	}
+
 	//Draw to texture
 	BeginTextureMode(target);
-	ClearBackground(RAYWHITE);
+	ClearBackground(PALETTE_JUNGLE_GREEN);
 
-	DrawText("Title Screen", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+	DrawText("PROTO-CALL", GetScreenWidth() / 2.0f - 792, 200, 240, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, PALETTE_MOSS_GREEN);
+	DrawButton(&StartButton, "Start");
+	DrawButton(&QuitButton, "Quit");
 
 	EndTextureMode();
 }
 
 void UpdateDrawGameplayScreen(void)
 {
-	if (IsKeyPressed(KEY_ENTER))
-	{
-		SwitchScreen(SCREEN_ENDING);  // Switch to Ending screen
-	}
+
 
 	//Draw to texture
 	BeginTextureMode(target);
-	ClearBackground(RAYWHITE);
+	ClearBackground(PALETTE_JUNGLE_GREEN);
 
 	DrawText("Gameplay Screen", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, PALETTE_MOSS_GREEN);
 
 	EndTextureMode();
 }
