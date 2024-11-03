@@ -195,6 +195,7 @@ void UpdateDrawLogoScreen(void)
 		BLACK);
 
 	DrawText("Made By Rhetorical", 815, 800, 30, BLACK);
+	DrawText(TextFormat("%.1f",LogoScreenDuration - LogoScreenTimer),15,1050,30,BLACK);
 	EndTextureMode();
 }
 
