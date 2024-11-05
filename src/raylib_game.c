@@ -56,8 +56,14 @@ typedef enum
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
+#if defined(PLATFORM_WEB)
+static const int screenWidth = 950;
+static const int screenHeight = 534;
+#else
 static const int screenWidth = 1920;
 static const int screenHeight = 1080;
+#endif
+
 
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 

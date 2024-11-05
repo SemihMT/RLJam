@@ -359,7 +359,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\button.cpp" />
+    <ClCompile Include="..\..\..\src\button.c" />
     <ClCompile Include="..\..\..\src\raylib_game.c" />
     <ClCompile Include="..\..\..\src\texture_manager.c" />
   </ItemGroup>
