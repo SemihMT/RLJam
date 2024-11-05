@@ -203,13 +203,13 @@ void UpdateDrawLogoScreen(void)
 	pos.y = virtualHeight / 2.0f - (logo.height / 2.0f);
 
 	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
-	DrawRectangle(0,0,GetScreenWidth(), 700,cornFlowerBlue);
+	DrawRectangle(0,0,virtualWidth, 700*scaleY,cornFlowerBlue);
 
 	Color green = {.r=106,.g=190, .b = 48,.a = 255};
-	DrawRectangle(0,700,GetScreenWidth(), 32,green);
+	DrawRectangle(0,700 * scaleY,virtualWidth, 32*scaleY,green);
 
 	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
-	DrawRectangle(0,732,GetScreenWidth(), 1000,brown);
+	DrawRectangle(0,732*scaleY,virtualWidth, 1000 * scaleY,brown);
 
 	DrawTextureEx(logo,(Vector2){pos.x * scaleX,pos.y * scaleY},0.0f,scaleX, WHITE);
 
