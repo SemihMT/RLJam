@@ -56,6 +56,10 @@ typedef enum
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
+
+static const int virtualWidth = 1920;
+static const int virtualHeight = 1080;
+
 #if defined(PLATFORM_WEB)
 static const int screenWidth = 950;
 static const int screenHeight = 534;
@@ -63,6 +67,10 @@ static const int screenHeight = 534;
 static const int screenWidth = 1920;
 static const int screenHeight = 1080;
 #endif
+
+static float scaleX;
+static float scaleY;
+
 
 
 static RenderTexture2D target = { 0 };  // Render texture to render our game
@@ -99,12 +107,15 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	InitWindow(screenWidth, screenHeight, "PROTO-CALL");
 
+	// Screen scaling
+	scaleX = (float)screenWidth/virtualWidth;
+	scaleY = (float)screenWidth/virtualHeight;
+
+
 	TraceLog(LOG_INFO,GetWorkingDirectory());
 	// Create the texture manager
 	textureManager = CreateTextureManager();
 
-	StartButton = CreateButton(screenWidth / 2.0f - 100, screenHeight / 2.0f + 350 - 100, 200, 50, GRAY, LIGHTGRAY, DARKGRAY);
-	QuitButton = CreateButton(screenWidth / 2.0f - 100, screenHeight / 2.0f + 350 - 25, 200, 50, GRAY, LIGHTGRAY, DARKGRAY);
 
 	// Load textures
 	Manager_LoadTexture(textureManager, "logo", "resources/logo.png");
@@ -113,7 +124,7 @@ int main(void)
 
 	// Render texture to draw full screen, enables screen scaling
 	// NOTE: If screen is scaled, mouse input should be scaled proportionally
-	target = LoadRenderTexture(screenWidth, screenHeight);
+	target = LoadRenderTexture(virtualWidth, virtualHeight);
 	SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
 #if defined(PLATFORM_WEB)
@@ -188,8 +199,8 @@ void UpdateDrawLogoScreen(void)
 	
 	Texture2D logo = Manager_GetTexture(textureManager, "logo");
 	Vector2 pos;
-	pos.x = GetScreenWidth() / 2.0f - (logo.width / 2.0f);
-	pos.y = GetScreenHeight() / 2.0f - (logo.height / 2.0f);
+	pos.x = virtualWidth / 2.0f - (logo.width / 2.0f);
+	pos.y = virtualHeight / 2.0f - (logo.height / 2.0f);
 
 	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
 	DrawRectangle(0,0,GetScreenWidth(), 700,cornFlowerBlue);
@@ -200,24 +211,42 @@ void UpdateDrawLogoScreen(void)
 	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
 	DrawRectangle(0,732,GetScreenWidth(), 1000,brown);
 
-	DrawTextureEx(logo,pos,0.0f,1, WHITE);
+	DrawTextureEx(logo,(Vector2){pos.x * scaleX,pos.y * scaleY},0.0f,scaleX, WHITE);
 
 	DrawRectangleLinesEx( 
-		(Rectangle){GetScreenWidth() / 2.0f - (logo.width / 2.0),
-		GetScreenHeight() / 2.0f - (logo.height / 2.0),
+		(Rectangle){virtualWidth / 2.0f - (logo.width / 2.0),
+		virtualHeight / 2.0f - (logo.height / 2.0),
 		logo.width,
 		logo.height},
 		15.0f,
 		BLACK);
 
-	DrawText("Made By Rhetorical", 815, 800, 30, BLACK);
-	DrawText(TextFormat("%.1f",LogoScreenDuration - LogoScreenTimer),15,1050,30,BLACK);
+	DrawText("Made By Rhetorical", 815 * scaleX, 800 * scaleY, 30 * scaleX, BLACK);
+	DrawText(TextFormat("%.1f",LogoScreenDuration - LogoScreenTimer),15 * scaleX,1050 * scaleY,30 * scaleX,BLACK);
 	EndTextureMode();
 }
 
 
 void UpdateDrawTitleScreen(void)
 {
+	StartButton = CreateButton(
+		virtualWidth / 2.0f - 100 * scaleX,
+		virtualHeight / 2.0f + (350 - 100) * scaleY,
+		200 * scaleX,
+		50*scaleY,
+		GRAY,
+		LIGHTGRAY,
+		DARKGRAY);
+
+	QuitButton = CreateButton(
+		virtualWidth / 2.0f - 100 * scaleX,
+		virtualHeight / 2.0f + (350 - 25) * scaleY,
+		200 * scaleX,
+		50 * scaleY,
+		GRAY,
+		LIGHTGRAY,
+		DARKGRAY);
+
 	UpdateButton(&StartButton);
 	UpdateButton(&QuitButton);
 	
@@ -234,8 +263,8 @@ void UpdateDrawTitleScreen(void)
 	BeginTextureMode(target);
 	ClearBackground(PALETTE_JUNGLE_GREEN);
 
-	DrawText("PROTO-CALL", GetScreenWidth() / 2.0f - 792, 200, 240, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, PALETTE_MOSS_GREEN);
+	DrawText("PROTO-CALL", virtualWidth / 2.0f - 792 * scaleX, 200 * scaleY, 240 * scaleX, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, PALETTE_MOSS_GREEN);
 	DrawButton(&StartButton, "Start");
 	DrawButton(&QuitButton, "Quit");
 
@@ -250,8 +279,8 @@ void UpdateDrawGameplayScreen(void)
 	BeginTextureMode(target);
 	ClearBackground(PALETTE_JUNGLE_GREEN);
 
-	DrawText("Gameplay Screen", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, PALETTE_MOSS_GREEN);
+	DrawText("Gameplay Screen", 150 * scaleX, 140 * scaleY, 30 * scaleX, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, PALETTE_MOSS_GREEN);
 
 	EndTextureMode();
 }
@@ -266,8 +295,8 @@ void UpdateDrawEndingScreen(void)
 	BeginTextureMode(target);
 	ClearBackground(RAYWHITE);
 
-	DrawText("Ending Screen", 150, 140, 30, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, screenWidth, screenHeight }, 16, BLACK);
+	DrawText("Ending Screen", 150 * scaleX, 140 * scaleY, 30 * scaleX, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, BLACK);
 
 	EndTextureMode();
 }
