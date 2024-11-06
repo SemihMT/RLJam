@@ -165,7 +165,7 @@ else
         ifeq ($(BUILD_WEB_ASYNCIFY),TRUE)
             CFLAGS += -O3
         else
-            CFLAGS += -Os
+            CFLAGS += -O1
         endif
     else
         ifeq ($(PLATFORM_OS),OSX)
@@ -233,7 +233,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # --memory-init-file 0       # to avoid an external memory initialization code file (.mem)
     # --preload-file resources   # specify a resources folder for data compilation
     # --source-map-base          # allow debugging in browser with source map
-    LDFLAGS += -s EXPORTED_FUNCTIONS="['_main', '_ResizeScreen']" -s EXPORTED_RUNTIME_METHODS="['ccall', 'cwrap']" -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s STACK_SIZE=$(BUILD_WEB_STACK_SIZE) -s FORCE_FILESYSTEM=1
+    LDFLAGS += -O1 -s EXPORTED_FUNCTIONS="['_main', '_ResizeScreen']" -s EXPORTED_RUNTIME_METHODS="['ccall', 'cwrap']" -s USE_GLFW=3 -s TOTAL_MEMORY=$(BUILD_WEB_HEAP_SIZE) -s STACK_SIZE=$(BUILD_WEB_STACK_SIZE) -s FORCE_FILESYSTEM=1
     
     # Build using asyncify
     ifeq ($(BUILD_WEB_ASYNCIFY),TRUE)
