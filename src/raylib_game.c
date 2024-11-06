@@ -61,11 +61,11 @@ static int virtualWidth = 1920;
 static int virtualHeight = 1080;
 
 #if defined(PLATFORM_WEB)
-static const int screenWidth = 950;
-static const int screenHeight = 534;
+static int screenWidth = 950;
+static int screenHeight = 534;
 #else
-static const int screenWidth = 950;
-static const int screenHeight = 534;
+static int screenWidth = 1920;
+static int screenHeight = 1080;
 #endif
 
 static float scaleX;
@@ -84,6 +84,7 @@ Button QuitButton;
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
 static void UpdateDrawFrame(void);      // Update and Draw one frame
+static void ResizeScreen(int,int);
 GameScreen currentScreen = SCREEN_LOGO;
 
 // Function prototypes for screen updates
@@ -107,12 +108,7 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	InitWindow(screenWidth, screenHeight, "PROTO-CALL");
 
-	// Screen scaling
-	scaleX = (float)screenWidth/virtualWidth;
-	scaleY = (float)screenHeight/virtualHeight;
-
-	virtualWidth *= scaleX;
-	virtualHeight *= scaleY;
+	ResizeScreen(screenWidth,screenHeight);
 
 	TraceLog(LOG_INFO,GetWorkingDirectory());
 	// Create the texture manager
@@ -326,4 +322,16 @@ void SwitchScreen(GameScreen screen)
 	break;
 	default: break;
 	}
+}
+void ResizeScreen(int canvasX, int canvasY)
+{
+	screenWidth = canvasX;
+	screenHeight = canvasY;
+
+	// Screen scaling
+	scaleX = (float)screenWidth/virtualWidth;
+	scaleY = (float)screenHeight/virtualHeight;
+
+	virtualWidth *= scaleX;
+	virtualHeight *= scaleY;
 }
