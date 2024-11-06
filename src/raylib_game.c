@@ -84,7 +84,7 @@ Button QuitButton;
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
 static void UpdateDrawFrame(void);      // Update and Draw one frame
-static void ResizeScreen(int,int);
+static void ResizeScreen(int, int);
 GameScreen currentScreen = SCREEN_LOGO;
 
 // Function prototypes for screen updates
@@ -108,9 +108,9 @@ int main(void)
 	//--------------------------------------------------------------------------------------
 	InitWindow(screenWidth, screenHeight, "PROTO-CALL");
 
-	ResizeScreen(screenWidth,screenHeight);
+	ResizeScreen(screenWidth, screenHeight);
 
-	TraceLog(LOG_INFO,GetWorkingDirectory());
+	TraceLog(LOG_INFO, GetWorkingDirectory());
 	// Create the texture manager
 	textureManager = CreateTextureManager();
 
@@ -193,34 +193,37 @@ void UpdateDrawLogoScreen(void)
 	//Draw to texture
 	BeginTextureMode(target);
 	ClearBackground(RAYWHITE);
-	
-	
+
+
 	Texture2D logo = Manager_GetTexture(textureManager, "logo");
 	Vector2 pos;
 	pos.x = (virtualWidth / 2.0f - (logo.width * scaleX / 2.0f));
 	pos.y = (virtualHeight / 2.0f - (logo.height * scaleY / 2.0f));
 
-	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
-	DrawRectangle(0,0,virtualWidth,700 * scaleY,cornFlowerBlue);
+	Color cornFlowerBlue = { .r = 100, .g = 149, .b = 237, .a = 255 };
+	DrawRectangle(0, 0, virtualWidth, 700 * scaleY, cornFlowerBlue);
 
-	Color green = {.r=106,.g=190, .b = 48,.a = 255};
-	DrawRectangle(0,700 * scaleY,virtualWidth, 32*scaleY,green);
+	Color green = { .r = 106,.g = 190, .b = 48,.a = 255 };
+	DrawRectangle(0, 700 * scaleY, virtualWidth, 32 * scaleY, green);
 
-	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
-	DrawRectangle(0,732*scaleY,virtualWidth, 1000 * scaleY,brown);
+	Color brown = { .r = 102,.g = 57, .b = 49,.a = 255 };
+	DrawRectangle(0, 732 * scaleY, virtualWidth, 1000 * scaleY, brown);
 
-	DrawTextureEx(logo,pos,0.0f,scaleX, WHITE);
+	DrawTextureEx(logo, pos, 0.0f, scaleX, WHITE);
 
-	DrawRectangleLinesEx( 
-		(Rectangle){virtualWidth / 2.0f - (logo.width * scaleX / 2.0),
-		virtualHeight / 2.0f - (logo.height*scaleY / 2.0),
-		logo.width*scaleX,
-		logo.height*scaleY},
+	DrawRectangleLinesEx(
+		(Rectangle)
+	{
+		virtualWidth / 2.0f - (logo.width * scaleX / 2.0),
+			virtualHeight / 2.0f - (logo.height * scaleY / 2.0),
+			logo.width* scaleX,
+			logo.height* scaleY
+	},
 		15.0f,
 		BLACK);
 
 	DrawText("Made By Rhetorical", 815 * scaleX, 800 * scaleY, 30 * scaleX, BLACK);
-	DrawText(TextFormat("%.1f",LogoScreenDuration - LogoScreenTimer),15 * scaleX,1050 * scaleY,30 * scaleX,BLACK);
+	DrawText(TextFormat("%.1f", LogoScreenDuration - LogoScreenTimer), 15 * scaleX, 1050 * scaleY, 30 * scaleX, BLACK);
 	EndTextureMode();
 }
 
@@ -231,7 +234,7 @@ void UpdateDrawTitleScreen(void)
 		virtualWidth / 2.0f - 100 * scaleX,
 		virtualHeight / 2.0f + (350 - 100) * scaleY,
 		200 * scaleX,
-		50*scaleY,
+		50 * scaleY,
 		GRAY,
 		LIGHTGRAY,
 		DARKGRAY);
@@ -247,12 +250,12 @@ void UpdateDrawTitleScreen(void)
 
 	UpdateButton(&StartButton);
 	UpdateButton(&QuitButton);
-	
-	if(StartButton.isPressed)
+
+	if (StartButton.isPressed)
 	{
 		SwitchScreen(SCREEN_GAMEPLAY);
 	}
-	if(QuitButton.isPressed)
+	if (QuitButton.isPressed)
 	{
 		ShouldClose = true;
 	}
@@ -262,7 +265,7 @@ void UpdateDrawTitleScreen(void)
 	ClearBackground(PALETTE_JUNGLE_GREEN);
 
 	DrawText("PROTO-CALL", virtualWidth / 2.0f - 792 * scaleX, 200 * scaleY, 240 * scaleX, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, PALETTE_MOSS_GREEN);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight }, 16 * scaleX, PALETTE_MOSS_GREEN);
 	DrawButton(&StartButton, "Start");
 	DrawButton(&QuitButton, "Quit");
 
@@ -278,7 +281,7 @@ void UpdateDrawGameplayScreen(void)
 	ClearBackground(PALETTE_JUNGLE_GREEN);
 
 	DrawText("Gameplay Screen", 150 * scaleX, 140 * scaleY, 30 * scaleX, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, PALETTE_MOSS_GREEN);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight }, 16 * scaleX, PALETTE_MOSS_GREEN);
 
 	EndTextureMode();
 }
@@ -294,7 +297,7 @@ void UpdateDrawEndingScreen(void)
 	ClearBackground(RAYWHITE);
 
 	DrawText("Ending Screen", 150 * scaleX, 140 * scaleY, 30 * scaleX, BLACK);
-	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight}, 16 * scaleX, BLACK);
+	DrawRectangleLinesEx((Rectangle) { 0, 0, virtualWidth, virtualHeight }, 16 * scaleX, BLACK);
 
 	EndTextureMode();
 }
@@ -304,7 +307,7 @@ void SwitchScreen(GameScreen screen)
 	currentScreen = screen;
 	switch (currentScreen)
 	{
-	case SCREEN_LOGO: 
+	case SCREEN_LOGO:
 	{
 	}
 	break;
@@ -312,7 +315,7 @@ void SwitchScreen(GameScreen screen)
 	{
 	}
 	break;
-	case SCREEN_GAMEPLAY: 
+	case SCREEN_GAMEPLAY:
 	{
 	}
 	break;
@@ -324,17 +327,17 @@ void SwitchScreen(GameScreen screen)
 	}
 }
 
-#if defined(PLATFORM_DEV)
+#if defined(PLATFORM_WEB)
 EMSCRIPTEN_KEEPALIVE
-#endif // defined(PLATFORM_DEV)
+#endif // defined(PLATFORM_WEB)
 void ResizeScreen(int canvasX, int canvasY)
 {
 	screenWidth = canvasX;
 	screenHeight = canvasY;
 
 	// Screen scaling
-	scaleX = (float)screenWidth/virtualWidth;
-	scaleY = (float)screenHeight/virtualHeight;
+	scaleX = (float)screenWidth / virtualWidth;
+	scaleY = (float)screenHeight / virtualHeight;
 
 	virtualWidth *= scaleX;
 	virtualHeight *= scaleY;
