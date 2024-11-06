@@ -324,6 +324,9 @@ void SwitchScreen(GameScreen screen)
 	}
 }
 
+#if defined(PLATFORM_DEV)
+EMSCRIPTEN_KEEPALIVE
+#endif // defined(PLATFORM_DEV)
 void ResizeScreen(int canvasX, int canvasY)
 {
 	screenWidth = canvasX;
