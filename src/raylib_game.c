@@ -57,15 +57,15 @@ typedef enum
 // Global Variables Definition
 //----------------------------------------------------------------------------------
 
-static const int virtualWidth = 1920;
-static const int virtualHeight = 1080;
+static int virtualWidth = 1920;
+static int virtualHeight = 1080;
 
 #if defined(PLATFORM_WEB)
 static const int screenWidth = 950;
 static const int screenHeight = 534;
 #else
-static const int screenWidth = 1920;
-static const int screenHeight = 1080;
+static const int screenWidth = 950;
+static const int screenHeight = 534;
 #endif
 
 static float scaleX;
@@ -109,8 +109,10 @@ int main(void)
 
 	// Screen scaling
 	scaleX = (float)screenWidth/virtualWidth;
-	scaleY = (float)screenWidth/virtualHeight;
+	scaleY = (float)screenHeight/virtualHeight;
 
+	virtualWidth *= scaleX;
+	virtualHeight *= scaleY;
 
 	TraceLog(LOG_INFO,GetWorkingDirectory());
 	// Create the texture manager
@@ -199,11 +201,11 @@ void UpdateDrawLogoScreen(void)
 	
 	Texture2D logo = Manager_GetTexture(textureManager, "logo");
 	Vector2 pos;
-	pos.x = virtualWidth / 2.0f - (logo.width / 2.0f);
-	pos.y = virtualHeight / 2.0f - (logo.height / 2.0f);
+	pos.x = (virtualWidth / 2.0f - (logo.width * scaleX / 2.0f));
+	pos.y = (virtualHeight / 2.0f - (logo.height * scaleY / 2.0f));
 
 	Color cornFlowerBlue = {.r = 100, .g = 149, .b = 237, .a = 255 };
-	DrawRectangle(0,0,virtualWidth, 700*scaleY,cornFlowerBlue);
+	DrawRectangle(0,0,virtualWidth,700 * scaleY,cornFlowerBlue);
 
 	Color green = {.r=106,.g=190, .b = 48,.a = 255};
 	DrawRectangle(0,700 * scaleY,virtualWidth, 32*scaleY,green);
@@ -211,13 +213,13 @@ void UpdateDrawLogoScreen(void)
 	Color brown = {.r=102,.g=57, .b = 49,.a = 255};
 	DrawRectangle(0,732*scaleY,virtualWidth, 1000 * scaleY,brown);
 
-	DrawTextureEx(logo,(Vector2){pos.x * scaleX,pos.y * scaleY},0.0f,scaleX, WHITE);
+	DrawTextureEx(logo,pos,0.0f,scaleX, WHITE);
 
 	DrawRectangleLinesEx( 
-		(Rectangle){virtualWidth / 2.0f - (logo.width / 2.0),
-		virtualHeight / 2.0f - (logo.height / 2.0),
-		logo.width,
-		logo.height},
+		(Rectangle){virtualWidth / 2.0f - (logo.width * scaleX / 2.0),
+		virtualHeight / 2.0f - (logo.height*scaleY / 2.0),
+		logo.width*scaleX,
+		logo.height*scaleY},
 		15.0f,
 		BLACK);
 
