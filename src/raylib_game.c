@@ -84,6 +84,10 @@ Button QuitButton;
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
 static void UpdateDrawFrame(void);      // Update and Draw one frame
+
+#if defined(PLATFORM_WEB)
+EMSCRIPTEN_KEEPALIVE
+#endif // defined(PLATFORM_WEB)
 static void ResizeScreen(int, int);
 GameScreen currentScreen = SCREEN_LOGO;
 
