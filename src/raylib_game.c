@@ -323,9 +323,7 @@ void SwitchScreen(GameScreen screen)
 	default: break;
 	}
 }
-#if defined(PLATFORM_WEB)
-	EMSCRIPTEN_KEEPALIVE
-#endif
+
 void ResizeScreen(int canvasX, int canvasY)
 {
 	screenWidth = canvasX;
